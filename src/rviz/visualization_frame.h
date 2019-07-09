@@ -40,6 +40,7 @@
 #include "rviz/window_manager_interface.h"
 #include "rviz/panel.h"
 
+#include <ros/node_handle.h>
 #include <ros/time.h>
 
 class QSplashScreen;
@@ -160,6 +161,8 @@ public:
 
   /** @brief Hide or show the hide-dock buttons. */
   void setHideButtonVisibility( bool visible );
+
+  void setNodeHandle(ros::NodeHandlePtr &nh);
 
 public Q_SLOTS:
   /** @brief Call this to let the frame know that something that would
@@ -373,6 +376,8 @@ protected:
 
   /// Indicates if the toolbar should be visible outside of fullscreen mode.
   bool toolbar_visible_;
+
+  ros::NodeHandlePtr nh_;
 };
 
 }

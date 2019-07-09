@@ -127,6 +127,7 @@ VisualizationFrame::VisualizationFrame( QWidget* parent )
   , post_load_timer_( new QTimer( this ))
   , frame_count_(0)
   , toolbar_visible_(true)
+  , nh_(NULL)
 {
   panel_factory_ = new PanelFactory();
 
@@ -145,6 +146,14 @@ VisualizationFrame::VisualizationFrame( QWidget* parent )
   reset_button->setContentsMargins(0,0,0,0);
   statusBar()->addPermanentWidget( reset_button, 0 );
   connect( reset_button, SIGNAL( clicked( bool )), this, SLOT( reset() ));
+
+  QToolButton* reset_ros_master_button = new QToolButton( );
+  reset_ros_master_button->setText( "Reset ROS master" );
+  reset_ros_master_button->setContentsMargins(0,0,0,0);
+  statusBar()->addPermanentWidget( reset_ros_master_button, 0 );
+  connect( reset_ros_master_button, &QToolButton::clicked, this, [this]() {
+    nh_.reset( new ros::NodeHandle );
+  });
 
   status_label_ = new QLabel("");
   statusBar()->addPermanentWidget( status_label_, 1 );
@@ -1382,6 +1391,10 @@ PanelDockWidget* VisualizationFrame::addPane( const QString& name, QWidget* pane
   hideRightDock( area == Qt::RightDockWidgetArea ? false : hide_right_dock_button_->isChecked() );
 
   return dock;
+}
+
+void VisualizationFrame::setNodeHandle(ros::NodeHandlePtr &nh) {
+  nh_ = nh;
 }
 
 } // end namespace rviz

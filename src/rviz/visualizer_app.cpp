@@ -269,6 +269,7 @@ bool VisualizerApp::init( int argc, char** argv )
 
     frame_ = new VisualizationFrame();
     frame_->setApp( this->app_ );
+    frame_->setNodeHandle(nh_);
     if( help_path != "" )
     {
       frame_->setHelpPath( QString::fromStdString( help_path ));
