@@ -227,6 +227,7 @@ protected Q_SLOTS:
    * signal the wrapper that we would like to restart with a different
    * ROS master URI. */
   void changeMaster();
+  void resetMaster();
 
   /** @brief Delete a panel widget.
    *

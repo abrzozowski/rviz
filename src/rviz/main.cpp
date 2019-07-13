@@ -39,7 +39,17 @@ int main( int argc, char** argv )
   vapp.setApp( &qapp );
   if( vapp.init( argc, argv ))
   {
-    return qapp.exec();
+
+    int value = 33;
+
+    while (value == 33)
+    {
+      std::cout << "exec" << std::endl;
+      value = qapp.exec();
+      qapp.quit();
+    }
+
+    return value;
   }
   else
   {

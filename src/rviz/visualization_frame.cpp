@@ -41,6 +41,7 @@
 #include <QMenuBar>
 #include <QMessageBox>
 #include <QTimer>
+#include <QThread>
 #include <QToolBar>
 #include <QToolButton>
 #include <QUrl>
@@ -63,6 +64,7 @@
 #include <OgreMeshManager.h>
 
 #include <ogre_helpers/initialization.h>
+#include <ros/ros.h>
 
 #include "rviz/displays_panel.h"
 #include "rviz/env_config.h"
@@ -153,7 +155,43 @@ VisualizationFrame::VisualizationFrame( QWidget* parent )
   statusBar()->addPermanentWidget( reset_ros_master_button, 0 );
   connect( reset_ros_master_button, &QToolButton::clicked, this, [this]() {
     nh_.reset( new ros::NodeHandle );
+      std::cout << "click" << std::endl;
+      this->resetMaster();
+//      this->initialize();
+
   });
+
+//  reset_ros_master_button->setStyleSheet("background-color: red");
+
+  QTimer *timer = new QTimer(reset_ros_master_button);
+  timer->setInterval(1000); //  check interval application
+  connect(timer, &QTimer::timeout, this, [button=std::move(reset_ros_master_button)]() {
+    std::cout << "checking stat " << std::endl;
+
+      button->setStyleSheet("");
+    if (!ros::master::check())
+      {
+
+        std::cout << "not good" << std::endl;
+//        reset_ros_master_button->setStyleSheet("background-color: red");
+//        this->setStyleSheet("background-color: red");
+//        ROS_INFO("checking stat 222");
+        button->setStyleSheet("background-color: orange");
+
+//      changeMaster();
+      }
+
+//      reset_ros_master_button->update();
+  });
+
+//  QThread* somethread = new QThread(this);q
+//
+//  timer->moveToThread(somethread);
+//  somethread->start();
+
+  timer->start();
+
+std::cout << "After timer" << std::endl;
 
   status_label_ = new QLabel("");
   statusBar()->addPermanentWidget( status_label_, 1 );
@@ -236,6 +274,14 @@ void VisualizationFrame::changeMaster()
   if( prepareToExit() )
   {
     QApplication::exit( 255 );
+  }
+}
+
+void VisualizationFrame::resetMaster()
+{
+  if( prepareToExit() )
+  {
+    QApplication::exit( 33 );
   }
 }
 
